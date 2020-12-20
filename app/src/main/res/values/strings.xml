@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">PayMacs</string>
+    <string name="pewdiepie_edition">[ Pewdiepie Edition ]</string>
+    <string name="arkade_blaster">Arkade Blaster</string>
+    <string name="enter_given_amount">Enter given amount</string>
+    <string name="_169_99">$169.99</string>
+    <string name="pay_now">Pay Now</string>
+</resources>
