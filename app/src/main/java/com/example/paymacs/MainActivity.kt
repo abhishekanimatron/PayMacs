@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.google.gson.GsonBuilder
 import com.razorpay.Checkout
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
@@ -23,8 +24,14 @@ class MainActivity : AppCompatActivity(), PaymentResultWithDataListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         Checkout.preload(applicationContext)//razorpay's for slow connections
-        retrofit = Retrofit.Builder().baseUrl("").addConverterFactory(GsonConverterFactory.create())
+
+        val gson = GsonBuilder().setLenient()
+
+        //only works on emulator which i accidentally deleted
+        retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:3000")
+            .addConverterFactory(GsonConverterFactory.create(gson.create()))
             .build()
         retroInterface = retrofit.create(RetrofitInterface::class.java)
         //getting amount from the text box and setting it on button click
@@ -50,7 +57,7 @@ class MainActivity : AppCompatActivity(), PaymentResultWithDataListener {
             }
 
             override fun onFailure(call: Call<Order>, t: Throwable) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_LONG).show()
             }
         })
     }
