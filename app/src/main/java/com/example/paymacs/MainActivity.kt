@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.razorpay.Checkout
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
@@ -74,10 +75,25 @@ class MainActivity : AppCompatActivity(), PaymentResultWithDataListener {
     }
 
     override fun onPaymentSuccess(p0: String?, p1: PaymentData?) {
-        TODO("Not yet implemented")
+        val map = HashMap<String, String>()
+        map["order_id"] = p1!!.orderId
+        map["pay_id"] = p1.paymentId
+        map["signature"] = p1.signature
+
+        retroInterface.updateTransaction(map).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.body().equals("success"))
+                    Toast.makeText(this@MainActivity, "Payment Successful", Toast.LENGTH_LONG)
+                        .show()
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+
+            }
+        })
     }
 
     override fun onPaymentError(p0: Int, p1: String?, p2: PaymentData?) {
-        TODO("Not yet implemented")
+        Toast.makeText(this, "Payment Failed, sheeit", Toast.LENGTH_LONG).show()
     }
 }
